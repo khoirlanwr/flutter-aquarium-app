@@ -5,20 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:todo_getx/blocs/auth_status.dart';
-import 'package:todo_getx/blocs/bloc_notification.dart';
-
-import 'package:todo_getx/screens/add_reminder_page.dart';
+import 'package:todo_getx/providers/monitoring_data_provider.dart';
+import 'package:todo_getx/providers/schedules_data.dart';
+import 'package:todo_getx/providers/set_data_provider.dart';
 import 'package:todo_getx/screens/home_page.dart';
 import 'package:todo_getx/screens/landing_page.dart';
 import 'package:todo_getx/screens/login_page.dart';
 import 'package:todo_getx/screens/register_page.dart';
+import 'package:todo_getx/screens/update_schedule.dart';
+
 import 'package:todo_getx/services/app_retain_widget.dart';
 import 'package:flutter/services.dart';
 import 'package:todo_getx/services/backgroundMain.dart';
 
-import 'package:todo_getx/blocs/reminder_bloc.dart';
-import 'package:todo_getx/blocs/user_authentication.dart';
 import 'package:todo_getx/services/counter_service.dart';
 
 void main() async {
@@ -28,10 +27,14 @@ void main() async {
     print("------------------------> firebase initial completed");
   });
 
-  runApp(MyApp());
-
-  // initial notification bloc
-  blocNotificationInstance.initializing();
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => SetDataProvider()),
+      ChangeNotifierProvider(create: (context) => MonitoringDataProvider()),
+      ChangeNotifierProvider(create: (context) => SchedulesData())
+    ],
+    child: MyApp(),
+  ));
 
   // initial background service
   var channel = const MethodChannel('com.example/background_service');
@@ -59,27 +62,19 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return AppRetainWidget(
-      child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => UserAuthentication()),
-          ChangeNotifierProvider(create: (context) => ReminderBloc())
-        ],
-        child: MaterialApp(
-          theme: ThemeData(
-              textTheme:
-                  GoogleFonts.latoTextTheme(Theme.of(context).textTheme)),
-          title: MyApp._title,
-          // home: HomePage(),
-          debugShowCheckedModeBanner: false,
-          initialRoute: '/',
-          routes: {
-            '/': (context) => LandingPage(),
-            '/home': (context) => HomePage(),
-            '/login': (context) => LoginPage(),
-            '/register': (context) => RegisterPage(),
-            '/addReminder': (context) => AddReminderPage()
-          },
-        ),
+      child: MaterialApp(
+        theme: ThemeData(
+            textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme)),
+        title: MyApp._title,
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => LandingPage(),
+          '/login': (context) => LoginPage(),
+          '/register': (context) => RegisterPage(),
+          '/home': (context) => HomePage(),
+          '/updateSchedule': (context) => UpdateSchedule()
+        },
       ),
     );
   }

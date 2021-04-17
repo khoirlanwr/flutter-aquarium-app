@@ -1,62 +1,33 @@
 {
   "project_info": {
-    "project_number": "509939574864",
-    "project_id": "reminder-medicine-app",
-    "storage_bucket": "reminder-medicine-app.appspot.com"
+    "project_number": "90894145047",
+    "project_id": "mobile-prjct",
+    "storage_bucket": "mobile-prjct.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:509939574864:android:3d9f901b8d149c34a68955",
-        "android_client_info": {
-          "package_name": "com.example.reminder_medicine"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "509939574864-sfqdl4lubbjnv8galh6assrq91dmtede.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCHrXdXUkiAsVKiZt37G6AZcd_HqEw5WkU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "509939574864-sfqdl4lubbjnv8galh6assrq91dmtede.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:509939574864:android:57bd3f8cea967986a68955",
+        "mobilesdk_app_id": "1:90894145047:android:b04aaa86160a16f2922e52",
         "android_client_info": {
           "package_name": "com.example.todo_getx"
         }
       },
       "oauth_client": [
         {
-          "client_id": "509939574864-sfqdl4lubbjnv8galh6assrq91dmtede.apps.googleusercontent.com",
+          "client_id": "90894145047-tf48dn0g0j1tdqv1me0arruuh58vkqp6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCHrXdXUkiAsVKiZt37G6AZcd_HqEw5WkU"
+          "current_key": "AIzaSyCx6OmL6nS4OBGqz86mw4zJUxxVfGB1Z8Y"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "509939574864-sfqdl4lubbjnv8galh6assrq91dmtede.apps.googleusercontent.com",
+              "client_id": "90894145047-tf48dn0g0j1tdqv1me0arruuh58vkqp6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

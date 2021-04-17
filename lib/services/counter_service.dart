@@ -3,13 +3,9 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_getx/providers/monitoring_data_provider.dart';
+import 'package:todo_getx/providers/set_data_provider.dart';
 
-import 'package:todo_getx/blocs/auth_status.dart';
-import 'package:todo_getx/blocs/bloc_notification.dart';
-import 'package:todo_getx/blocs/medicine_status.dart';
-import 'package:todo_getx/blocs/reminder_bloc.dart';
-
-import 'package:todo_getx/models/reminder_model.dart';
 import 'package:todo_getx/services/counter.dart';
 
 class CounterService {
@@ -25,12 +21,15 @@ class CounterService {
 
   void startCounting() {
     Stream.periodic(Duration(seconds: 5)).listen((_) async {
-      _counter.increment();
-      print('Counter Incremented: ${_counter.count.value}');
+      // _counter.increment();
+      // print('Counter Incremented: ${_counter.count.value}');
+
+      print("Background job is running");
 
       // let your function here
       // firedNotification();
-      conditionRequiredReminder();
+      // conditionRequiredReminder();
+      statusConditionNotifications();
     });
   }
 
@@ -53,39 +52,54 @@ class CounterService {
     return preProcessGetTime(_timeNow);
   }
 
-  void conditionRequiredReminder() async {
+  void firstCondition(int statusPakan) {
+    if (statusPakan == 0) {
+      print('Pakan habis!');
+    }
+  }
+
+  void secondCondition(int dataNTU, int settedNTU) {
+    if (dataNTU >= settedNTU) {
+      print('Air sudah keruh!');
+    }
+  }
+
+  void lastCondition(int dataPH, int settedPH) {
+    if (dataPH > settedPH) print('dataPH melebihi yang sudah ditentukan');
+    if (dataPH < settedPH) print('dataPH kurang dari yang sudah ditentukan');
+  }
+
+  void statusConditionNotifications() async {
     // initial firebase
     Firebase.initializeApp().whenComplete(() {
       print("------------------------> firebase initial completed");
     });
 
-    // get logged in account
-    String id = await authStatus.retrieveData();
-    print(id);
+    // access all data firstly
+    monitoringDataProvider.retrieveMonitoringData();
+    setDataProvider.readDataSet();
 
-    if (id != "null-login") {
-      // ambil data waktu sekarang
-      String timenow = timeNow();
-      print(timenow);
+    // kondisi 0: tidak ada status
+    // kondisi 1: notifikasi saat pakan habis
+    int statusPakan = monitoringDataProvider.getDataPakan();
+    firstCondition(statusPakan);
 
-      String _medicineStatus = await medicineStatus.retrieveData();
-      print(_medicineStatus);
+    // kondisi 2: notifikasi saat NTU lebih besar dari set NTU (air sudah keruh)
+    int dataNTU = monitoringDataProvider.getDataNTU();
+    int settedNTU = setDataProvider.getSettedNTU();
+    secondCondition(dataNTU, settedNTU);
 
-      if (_medicineStatus != 'Tidak ada notifikasi') {
-        // ambil data waktu yang ada di record user
-        List<ReminderModel> dataStored = await reminderBloc.getDataByID(id);
-        print(dataStored.length);
+    // kondisi 3: notifikasi saat pH < set pH
+    // kondisi 4: notifikasi saat pH > set pH
+    int dataPH = monitoringDataProvider.getDataPH();
+    int settedPH = setDataProvider.getSettedPH();
+    lastCondition(dataPH, settedPH);
+  }
 
-        // iterasi tiap data
-        dataStored.forEach((element) {
-          print(element.dataTime);
-          if (timenow == element.dataTime) {
-            print('Alarm Fired!!!');
-            blocNotificationInstance.showNotification(_medicineStatus);
-            // blocNotificationInstance.showNotification(element.dataTitle);
-          }
-        });
-      }
-    }
+  void conditionRequiredReminder() async {
+    // initial firebase
+    Firebase.initializeApp().whenComplete(() {
+      print("------------------------> firebase initial completed");
+    });
   }
 }
