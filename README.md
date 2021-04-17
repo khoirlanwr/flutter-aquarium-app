@@ -1,4 +1,4 @@
-# todo_getx
+# Flutter Aquarium App
 
 A new Flutter project.
 
